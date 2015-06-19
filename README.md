@@ -55,7 +55,7 @@ RZSideBar is available under the MIT License. See the LICENSE file for more info
 
 ARC
 ============
-RZLoopView uses ARC.
+RZSideBar uses ARC.
 
 Contact
 ============
