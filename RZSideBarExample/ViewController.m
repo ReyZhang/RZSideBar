@@ -22,7 +22,7 @@
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
     
-    self.sideBar = [[RZSideBar alloc] initWithDirection:SideBarDirectionLeft];
+    self.sideBar = [[RZSideBar alloc] initWithDirection:SideBarDirectionRight];
     
     self.sideBar.textLabel.text = @"点击显示结果面板<-";
     self.sideBar.textLabel.font= [UIFont systemFontOfSize:15];

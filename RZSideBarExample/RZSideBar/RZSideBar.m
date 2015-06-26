@@ -71,16 +71,16 @@
     self.contentView = contentView;
     self.contentView.backgroundColor = [UIColor clearColor];
     [self.containerView addSubview:self.contentView];
-
+    
     
 }
 
 ////添加到父视图
 -(void)addInView:(UIView *)view {
-
+    
     self.superView  = view;
     [self.superView addSubview:self];
-
+    
 }
 
 //////显示
@@ -88,12 +88,16 @@
     [self showAnimated:YES];
 }
 - (void)showAnimated:(BOOL)animated {
-    if ([self.delegate respondsToSelector:@selector(sideBar:willAppear:)]) {
-        [self.delegate sideBar:self willAppear:animated];
+    
+    if (!_hasShown) {
+        
+        if ([self.delegate respondsToSelector:@selector(sideBar:willAppear:)]) {
+            [self.delegate sideBar:self willAppear:animated];
+        }
+        _hasShown ^= 1;
+        /////处理动画
+        [self commonAnimated:animated];
     }
-    _hasShown = YES;
-    /////处理动画
-    [self commonAnimated:animated];
 }
 
 
@@ -104,15 +108,17 @@
 
 - (void)dismissAnimated:(BOOL)animated {
     
-    if ([self.delegate respondsToSelector:@selector(sideBar:willDisappear:)]) {
-        [self.delegate sideBar:self willDisappear:animated];
+    if (_hasShown) {
+        
+        if ([self.delegate respondsToSelector:@selector(sideBar:willDisappear:)]) {
+            [self.delegate sideBar:self willDisappear:animated];
+        }
+        
+        /////处理动画
+        _hasShown ^= 1;
+        
+        [self commonAnimated:animated];
     }
-    
-    /////处理动画
-    _hasShown = NO;
-    
-    [self commonAnimated:animated];
-    
 }
 
 
@@ -143,7 +149,7 @@
     
     /////处理动画
     if (animated) {
-
+        
         [UIView animateWithDuration:self.animationDuration
                          animations:^{
                              CGRect frame = self.frame;
@@ -166,7 +172,7 @@
                          }];
         
     }else {
-
+        
         
         CGRect frame = self.frame;
         frame.origin.x += moveToX;
@@ -187,7 +193,7 @@
 }
 
 
-#pragma mark --GETTER  
+#pragma mark --GETTER
 -(UILabel *)textLabel {
     if (_textLabel == nil) {
         _textLabel = [[UILabel alloc] init];
@@ -233,7 +239,7 @@
 #pragma mark -- UIView lifeCircle
 -(void)layoutSubviews {
     [super layoutSubviews];
-
+    
     
     CGRect bounds = [[UIScreen mainScreen] bounds];
     bounds.size.height = self.superView.frame.size.height;
@@ -266,7 +272,7 @@
     
     /////计算contentView的位置
     if (self.contentView != nil) {
-//        CGFloat contentX =(self.direction == SideBarDirectionRight) ? 20 : 0;
+        //        CGFloat contentX =(self.direction == SideBarDirectionRight) ? 20 : 0;
         self.contentView.frame = CGRectMake(0,
                                             0,
                                             self.contentWidth,
